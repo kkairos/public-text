@@ -128,9 +128,9 @@ Causes the entity to wait for the given condition. The script will stay on this 
 
 A quick example of code for an entity that goes back and forth on a platform until it hits a pit or a wall, turns around, then repeats:
 
-  :PATROL
-  #MOVE CURRENT
-  #WAIT UNTIL PIT WALL
-  #DIRECTION TURN
-  #WAIT TIME 0.5
-  #GOTO PATROL
+    :PATROL
+    #MOVE CURRENT
+    #WAIT UNTIL PIT WALL
+    #DIRECTION TURN
+    #WAIT TIME 0.5
+    #GOTO PATROL
