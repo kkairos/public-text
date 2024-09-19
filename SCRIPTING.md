@@ -12,7 +12,6 @@ Condition to wait upon. The following are valid conditions:
 
 * `FLOOR` The entity waits until it is on the floor.
 * `PIT` The entity waits until its movement would put it in a pit. No effect if idle.
-* `TIME [FLOAT]` The entity waits `[FLOAT]` length of time, in seconds.
 * `WALL` The entity waits until its movement would have it hit a wall. No effect if idle.
 
 *Conditions can be combined by simply listing them all together as a `PARAGRAPH` (see below), e.g. `PIT WALL`. Combined conditions are treated as `OR` not `AND`.*
@@ -24,7 +23,7 @@ Standard types of integer, float, and "string". Unless otherwise noted, all `STR
 A variant of `PARAGRAPH` -- a command to pass to another entity. See `#COMMAND` below.
 
 ### `DIRECTION`
-Direction to move in. Accepts these values: `IDLE`, `LEFT`, `RIGHT`, `PLAYER`, `FLOW`, `COORDINATE [INT]`, where `[INT]` is the desired X-coordinate. `PLAYER` faces the player. `CURRENT` means the object's current direction will be used.
+Direction to move in. Accepts these values: `IDLE`, `LEFT`, `RIGHT`, `PLAYER`, `CURRENT`, `COORDINATE [INT]`, `TURN` where `[INT]` is the desired X-coordinate. `PLAYER` faces the player. `CURRENT` means the object's current direction will be used. `TURN` means the opposite of this direction will be used.
 
 ### `FILE_PATH `
 
@@ -67,7 +66,9 @@ Pass `[COMMAND]` to the entity `[UNIQUE_ID]`, causing it to add `[COMMAND]` to i
 Sends the cutscene manager the relevant `[FILE_PATH]` as a script to process. The script is appended to the manager's current command queue.
 
 ### `#DIRECTION [DIRECTION]`
-Causes the entity to face the stated direction. Forces animation direction update.
+Causes the entity to face the stated direction. Forces animation direction update. E.g.:
+
+* `#DIRECTION TURN` causes the entity to turn around.
 
 ### `#GOTO [STRING]`
 Go to label `[STRING]` in the object's command queue.
@@ -85,7 +86,10 @@ Entity loads the script at `[FILE_PATH]`. This script becomes the new entity scr
 Entity locks its input. Relatively useless for non-player entities.
 
 ### `#MOVE [DIRECTION]`
-Causes the entity to move in the stated direction. Moving entities continue moving until told to stop with #move idle
+Causes the entity to move in the stated direction with no stated end condition.
+
+### `#MOVE [DIRECTION] UNTIL [CONDITION]`
+Causes the entity to move in the stated direction until the given condition is TRUE.
 
 ### `#MUSIC CLIP [STRING]`
 Attempts to have the audio handler play the music clip with id `[STRING]` from the current set. Only when adaptive music is in use and a track is currently playing.
@@ -114,5 +118,19 @@ Causes any entity with `[UNIQUE_ID]` in the current scene to re-evaluate its spa
 ### `#UNLOCKINPUT`
 Entity unlocks its input. Relatively useless for non-player entities.
 
+### `#WAIT [FLOAT]`
+Causes the entity to wait for the given lenght of time, [FLOAT], in seconds.
+
 ### `#WAIT [CONDITION]`
 Causes the entity to wait for the given condition. The script will stay on this command until the relevant condition is met.
+
+## EXAMPLES:
+
+A quick example of code for an entity that goes back and forth on a platform until it hits a pit or a wall, turns around, then repeats:
+
+  :PATROL
+  #MOVE CURRENT
+  #WAIT UNTIL PIT WALL
+  #DIRECTION TURN
+  #WAIT TIME 0.5
+  #GOTO PATROL
