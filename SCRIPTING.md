@@ -121,7 +121,7 @@ Entity unlocks its input. Relatively useless for non-player entities.
 ### `#WAIT [FLOAT]`
 Causes the entity to wait for the given lenght of time, [FLOAT], in seconds.
 
-### `#WAIT [CONDITION]`
+### `#WAITUNTIL [CONDITION]`
 Causes the entity to wait for the given condition. The script will stay on this command until the relevant condition is met.
 
 ## EXAMPLES:
