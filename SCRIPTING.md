@@ -68,7 +68,7 @@ Sends the cutscene manager the relevant `[FILE_PATH]` as a script to process. Th
 ### `#DIRECTION [DIRECTION]`
 Causes the entity to face the stated direction. Forces animation direction update. E.g.:
 
-* `#DIRECTION TURN` causes the entity to turn around.
+* `#DIRECTION REVERSE` causes the entity to turn around.
 
 ### `#GOTO [STRING]`
 Go to label `[STRING]` in the object's command queue.
