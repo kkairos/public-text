@@ -23,7 +23,7 @@ Standard types of integer, float, and "string". Unless otherwise noted, all `STR
 A variant of `PARAGRAPH` -- a command to pass to another entity. See `#COMMAND` below.
 
 ### `DIRECTION`
-Direction to move in. Accepts these values: `IDLE`, `LEFT`, `RIGHT`, `PLAYER`, `CURRENT`, `COORDINATE [INT]`, `TURN` where `[INT]` is the desired X-coordinate. `PLAYER` faces the player. `CURRENT` means the object's current direction will be used. `TURN` means the opposite of this direction will be used.
+Direction to move in. Accepts these values: `IDLE`, `LEFT`, `RIGHT`, `PLAYER`, `CURRENT`, `COORDINATE [INT]`, `REVERSE` where `[INT]` is the desired X-coordinate. `PLAYER` faces the player. `CURRENT` means the object's current direction will be used. `REVERSE` means the opposite of this direction will be used.
 
 ### `FILE_PATH `
 
