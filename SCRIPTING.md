@@ -10,9 +10,15 @@ Designed to make a simple reusable entity script for entity AI and cutscenes, es
 ### `CONDITION`
 Condition to wait upon. The following are valid conditions:
 
+For use with scripts attached to PlatformingBody2D:
 * `FLOOR` The entity waits until it is on the floor.
 * `PIT` The entity waits until its movement would put it in a pit. No effect if idle.
 * `WALL` The entity waits until its movement would have it hit a wall. No effect if idle.
+
+For use with scripts attached to Area2D:
+* `PLAYERDETECTED` The entity waits for the player to be within its body detection area.
+* `INTERACT` The entity waits for the player to press the regular "interact with" button, e.g. for signs and doors.
+* `PLAYERINPUT` The entity waits for the player to press one of the regular input buttons.
 
 *Conditions can be combined by simply listing them all together as a `PARAGRAPH` (see below), e.g. `PIT WALL`. Combined conditions are treated as `OR` not `AND`.*
 
@@ -111,6 +117,12 @@ Causes `[UNIQUE_ID]` to be stored in the save data as TRUE.
 
 ### `#TEXTBOX [PARAGRAPH]`
 Creates a text-box on screen which is cleared with player input.
+
+### `#TEXTBOXALIGN [STRING]`
+Changes the textbox text alignment. Valid values for [STRING] are LEFT, RIGHT, and CENTER.
+
+### `#TEXTBOXCLOSE`
+Closes the text-box on screen.
 
 ### `#UNIQUECHECK [UNIQUE_ID]`
 Causes any entity with `[UNIQUE_ID]` in the current scene to re-evaluate its spawn condition. If `[UNIQUE_ID]` is not supplied, causes all relevant entities to do so.
