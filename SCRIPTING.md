@@ -142,6 +142,6 @@ A quick example of code for an entity that goes back and forth on a platform unt
 
     :PATROL
     #MOVE CURRENT UNTIL PIT WALL
-    #DIRECTION TURN
+    #DIRECTION REVERSE
     #WAIT 0.5
     #GOTO PATROL
