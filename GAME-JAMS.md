@@ -2,7 +2,14 @@
 
 List of game jams I think are neat. I will include in each:
 
-A link to a jam, genre, theme, timeframe, and the and notes
+* A link to a jam or related page
+* Frequency
+* Timeframe to complete projects (not including judging)
+* Engine Requirements
+* Genre Requirements
+* Theme Requirements
+
+Some of these jams will have footnotes on some portion or another. For specifics including any target platform requirements, and asset and code reuse rules and guidelines please see the relevant jam pages/organizers.
 
 Probably perpetually WIP since there's only like four in the list ATM. But I thought it would be good to have something to share with folks.
 
@@ -10,7 +17,9 @@ In case you're the sort of person like me who would care, I don't mind this list
 
 - kkairos
 
-| Channel | Genre | Theme | Timeframe | Notes |
-| :----- | :-----: | :-----: | :----- | :----- |
-| [Metroidvania Month](https://itch.io/jam/metroidvania-month-25) | Metroidvania | Usually optional | 30 days | not many |
-| [Super MVM](https://itch.io/jam/metroidvania-month-super-25) | Metroidvania | None | 90 | Yes |
+| Channel | Frequency | Timeframe | Engine | Genre | Theme |
+| :----- | :-----: | :-----: | :-----: | :----- | :----- |
+| [Metroidvania Month](https://itch.io/jam/metroidvania-month-25) | Quarterly | 30 Days | None | Metroidvania | Inspiration |
+| [Super MVM](https://itch.io/jam/metroidvania-month-super-25) | Quarterly | 90 Days | None | Metroidvania | None |
+| [GMTK Game Jam](https://gmtk.itch.io/) | Annual | 2-4 Days | None | None | Mandatory |
+| [Godot Wild Jam](https://godotwildjam.com/) | Monthly on 2nd Friday | 10 Days | Godot | None | Mandatory |
