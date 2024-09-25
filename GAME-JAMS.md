@@ -11,6 +11,6 @@ In case you're the sort of person like me who would care, I don't mind this list
 - kkairos
 
 | Channel | Genre | Theme | Timeframe | Notes |
-| ----- | :-----: | :-----: | :----- | :----- |
+| :----- | :-----: | :-----: | :----- | :----- |
 | [Metroidvania Month](https://itch.io/jam/metroidvania-month-25) | Metroidvania | Usually optional | 30 days | not many |
 | [Super MVM](https://itch.io/jam/metroidvania-month-super-25) | Metroidvania | None | 90 | Yes |
