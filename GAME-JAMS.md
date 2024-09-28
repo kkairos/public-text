@@ -19,8 +19,9 @@ In case you're the sort of person like me who would care, I don't mind this list
 
 | Channel | Frequency | Timeframe | Engine | Genre | Theme |
 | :----- | :-----: | :-----: | :-----: | :----- | :----- |
+| [GMTK Game Jam](https://gmtk.itch.io/) | Annual | 2-4 Days | None | None | Mandatory |
+| [Ludum Dare](https://ludumdare.com/) | Annual | 2 Days | None | None | Mandatory |
 | [Metroidvania Month](https://itch.io/jam/metroidvania-month-25) | Quarterly | 30 Days | None | Metroidvania | Inspiration |
 | [Super MVM](https://itch.io/jam/metroidvania-month-super-25) | Quarterly | 90 Days | None | Metroidvania | None |
-| [GMTK Game Jam](https://gmtk.itch.io/) | Annual | 2-4 Days | None | None | Mandatory |
 | [Godot Wild Jam](https://godotwildjam.com/) | Monthly on 2nd Friday | 10 Days | Godot | None | Mandatory |
 | [Themed Horror Game Jam](https://itch.io/jam/themed-horror-game-jam-19) | Quarterly | 40 days | None | None | Mandatory |
