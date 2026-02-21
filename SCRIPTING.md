@@ -1,147 +1,244 @@
-# GODOT ENTITY SCRIPTING PLAN
+Below, in command syntaxes:
 
-Designed to make a simple reusable entity script for entity AI and cutscenes, especially in platformers, in Godot.
+* capitalization below is only to indicate syntax. All scripting is interpreted as lowercase in real-time, and can as such be written lowercase without consequence.
+* The ONE exception is text used with textbox commands--anything after the line count--which will ALWAYS retain its casing.
+* #commands are lowercase with a pound sign before them (note: commands WILL NOT execute without the # sign!)
+* NECESSARY ARGUMENTS are capitalized
+* [OPTIONAL ARGUMENTS] are capitalized and bracketed
+* OPTION A/OPTION B are divided if they are the only valid argument options
 
-## TWO NOTES ON LETTER CASE
-*For ease of typing of this language, all commands and other strings, including entity `UNIQUE_ID` values, are interpreted as if lowercase. For ease of writing this documentation, all commands are written in UPPERCASE, and where an arguemnt type would go, the type is written as `[ARGUMENT_TYPE]`, not `<ARGUMENT_TYPE>`.*
+#### `#addentity ENTITY`
 
-## ARGUMENT TYPES
+Adds entity to scene by ENTITY in CommonAssets.
 
-### `CONDITION`
-Condition to wait upon. The following are valid conditions:
+#### `#animate [MODIFIER] ANIMATION`
 
-For use with scripts attached to PlatformingBody2D:
-* `FLOOR` The entity waits until it is on the floor.
-* `PIT` The entity waits until its movement would put it in a pit. No effect if idle.
-* `WALL` The entity waits until its movement would have it hit a wall. No effect if idle.
+The script's parent node will act based on the following logic:
 
-For use with scripts attached to Area2D:
-* `PLAYERDETECTED` The entity waits for the player to be within its body detection area.
-* `INTERACT` The entity waits for the player to press the regular "interact with" button, e.g. for signs and doors.
-* `PLAYERINPUT` The entity waits for the player to press one of the regular input buttons.
+If MODIFIER does not contain any special value of "frame", "resume", or "queue", its animation node will play ANIMATION.
 
-*Conditions can be combined by simply listing them all together as a `PARAGRAPH` (see below), e.g. `PIT WALL`. Combined conditions are treated as `OR` not `AND`.*
+If MODIFIER is "queue", the animation node will instead queue up ANIMATION.
 
-### `INT`, `FLOAT`, `STRING`, `PARAGRAPH`
-Standard types of integer, float, and "string". Unless otherwise noted, all `STRING` arguments consist of one-word strings and only of letters, numbers, and underscores. `PARAGRAPH` is used to denote where multi-word strings with more characters are acceptable.
+If MODIFIER is "frame", the parent node attempt to set its sprite to the integer represented by ANIMATION. This modifier should only be used for PlatformingBody2D.
 
-### `COMMAND`
-A variant of `PARAGRAPH` -- a command to pass to another entity. See `#COMMAND` below.
+All three cases above will cause the object's animation node to stop automatically animating based on things like EntityStates.
 
-### `DIRECTION`
-Direction to move in. Accepts these values: `IDLE`, `LEFT`, `RIGHT`, `PLAYER`, `CURRENT`, `COORDINATE [INT]`, `REVERSE` where `[INT]` is the desired X-coordinate. `PLAYER` faces the player. `CURRENT` means the object's current direction will be used. `REVERSE` means the opposite of this direction will be used.
+If MODIFIER is "resume" this will cause the animation node to RESUME
 
-### `FILE_PATH `
+#### `#attack` - PlatformingBody2D use only
 
-File path. Written as per Godot file-path parlance, e.g. starting with `res://` if seeking a file within the project folders or `user://` if looking in the game's user-data directory.
+Trigger the attack function for this PlatformingBody2D
 
-### `UNIQUE_ID`
-A single-word `STRING` which serves as the unique ID of an entity. `UNIQUE_ID` values can be stored in save-data as true, which will help the game know which items, coins, etc. have been collected at this time.
+#### `#attackwatch [on/off]` - PlatformingBody2D use only
 
-## SCRIPTING REFERENCE
+When in attack-watch mode, a PlatformingBody2D will auto-seek to the ":attack" label once the player is detected. Use "ON" or without modifier to turn attack watch on, or "OFF"
+to disable it. When attackwatch triggers the auto-seek, it automatically turns off.
 
-These scripting commands can be used by any platforming entity in the game. Many are also usable by the cutscene director object, although some of them will be less than useful in one context or the other.</p>
+#### `#color` - PlatformingBody2D use only
 
-### `:[STRING]`
-Create label `[STRING]` at this line in the object's command queue.
+Cause a parent PlatformingBody2D node to change its color modulation at the Canvas level
 
-### `#ANIMATE [STRING]`
-If `[STRING]` exists in the entity's animation player, play it immediately. The following special strings can also be used, with a second argument as necessary, and in projects using this scripting, should not be used as names for animations.
+#### `#command UNIQUE_ID COMMAND`
 
-* `FRAME [INT]` Causes the entity sprite to change to frame `[INT]`.
-* `QUEUE [STRING]` Causes the animation player to queue the resulting animation `[STRING]` rather than switch to it immediately.
-* `RESUME` Causes the animation player to resume its automatic updates based on player state.
-</ul>
+Commands the entity with the unique ID to execute COMMAND--COMMAND should be formatted as if it is a whole separate command line.
 
-*All animation commands except `#ANIMATION RESUME` will stop normal animation processing.
+#### `#createprojectile X0 X1 Y0 Y1`
 
-### `#CHOICE BEGIN [PARAGRAPH]`
-Creates a text-box on screen which is presents a choice to the player with prompt [PARAGRAPH]. Choices are coded by using `CHOICE OPTION [STRING] [PARAGRAPH]`.
+Creates a projectile between X0 and X1 and between Y0 and Y1. Currently it's just a falling spike.
 
-### `#CHOICE END`
-Ends the list of choices.
+#### `#die` - enemies with Stats only
 
-### `#CHOICE OPTION [STRING] [PARAGRAPH]`
+Set the entity's stats to zero.
 
-Presents a choice option to the player. When a given option `[PARAGRAPH]` is picked, the program immediately executes the command `#GOTO [STRING]`.
+#### `#direction DIRECTION` - PlatformingBody2D use only
 
-### `#COMMAND [UNIQUE_ID] [COMMAND]`
-Pass `[COMMAND]` to the entity `[UNIQUE_ID]`, causing it to add `[COMMAND]` to its command queue. `#COMMAND` cannot itself be passed as `[COMMAND]`.
+Causes PlatformingBody2D to begin facing in a direction. Valid directions are IDLE (stop moving), LEFT, RIGHT (as stated), REVERSE (opposite of its current facing direction) and CURRENT (the current facing direction.)
 
-### `#CUTSCENE [FILE_PATH]`
-Sends the cutscene manager the relevant `[FILE_PATH]` as a script to process. The script is appended to the manager's current command queue.
+#### `#end`
 
-### `#DIRECTION [DIRECTION]`
-Causes the entity to face the stated direction. Forces animation direction update. E.g.:
+Stop processing the script here.
 
-* `#DIRECTION REVERSE` causes the entity to turn around.
+#### `#forcemove [INT]` 
 
-### `#GOTO [STRING]`
-Go to label `[STRING]` in the object's command queue.
+Sets x-position to the given INT.
 
-### `#FORCEMOVE [INT]`
-Causes the entity to force its x-coordinate to the given x-coordinate of `[INT]`.
+#### `#goto LABEL`
 
-### `#JUMP [DIRECTION]`
-Causes the entity to jump in the stated direction.
+Seek to label :label. Does not resume processing if the script processing is stopped.
 
-### `#LOADSCRIPT [FILE_PATH]`
-Entity loads the script at `[FILE_PATH]`. This script becomes the new entity script and the current script is discarded.
+#### `#gotoif LABEL`
 
-### `#LOCKINPUT`
-Entity locks its input. Relatively useless for non-player entities.
+Goes to LABEL if the camera variable for the room is set.
 
-### `#MOVE [DIRECTION]`
-Causes the entity to move in the stated direction with no stated end condition.
+#### `#gotoandresume LABEL`
 
-### `#MOVE [DIRECTION] UNTIL [CONDITION]`
-Causes the entity to move in the stated direction until the given condition is TRUE.
+Seek to label :label. Resumes processing if the script processing stopped.
 
-### `#MUSIC CLIP [STRING]`
-Attempts to have the audio handler play the music clip with id `[STRING]` from the current set. Only when adaptive music is in use and a track is currently playing.
+#### `#healplayer`
 
-### `#MUSIC TRACK [STRING]`
-Attempts to have the audio handler play the music track (or 'set' in the case of adaptive music setups) with audio handler id `[STRING]`.
+Heals the player to full!
 
-### `#SAVEGAME [STRING] [INT1] [INT2]`
-Saves the current (temporary) save data as the game's save data, `[STRING]` as the one-string room ID in the game's save-data object, [INT1] as the player's X-coordinate, and [INT2] as the player's y-coordinate. Writes the resulting save data to disk.
+#### `#if [NOT/U/UNIQUE] UNIQUE_ID COMMAND`
 
-### `#SFX [STRING]`
-Attempts to have the audio handler play the sound effect with id `[STRING]`.
+Executes COMMAND if the given unique ID value is found in the current working save file. U or UNIQUE can be used as the second argument to be expressly clear what kind of data check we're doing.
 
-### `#STORE COUNTABLE [STRING]`
-Increases the number of `[STRING]` stored in save data by 1. Adds `[STRING]` to the countable save data if it isn't there.
+COMMAND should be formatted as if it is a whole separate command line.
 
-### `#STORE UNIQUE [UNIQUE_ID]`
-Causes `[UNIQUE_ID]` to be stored in the save data as TRUE.
+#### `#if C/COUNT COUNTABLE_VARIABLE [==/>=/<=/</>] VALUE COMMAND.
 
-### `#TEXTBOX [PARAGRAPH]`
-Creates a text-box on screen which is cleared with player input.
+Executes COMMAND if the given COUNTABLE_VARIABLE value meets the given comparison condition.
 
-### `#TEXTBOXALIGN [STRING]`
-Changes the textbox text alignment. Valid values for [STRING] are LEFT, RIGHT, and CENTER.
+COMMAND should be formatted as if it is a whole separate command line.
 
-### `#TEXTBOXCLOSE`
-Closes the text-box on screen.
+#### `#jump` - PlatformingBody2D use only
 
-### `#UNIQUECHECK [UNIQUE_ID]`
-Causes any entity with `[UNIQUE_ID]` in the current scene to re-evaluate its spawn condition. If `[UNIQUE_ID]` is not supplied, causes all relevant entities to do so.
+Cause the PlatformingBody2D to jump. Presently has no modifiers, so the full jump will always be used.
 
-### `#UNLOCKINPUT`
-Entity unlocks its input. Relatively useless for non-player entities.
+#### `#loadscript FILE_NAME`
 
-### `#WAIT [FLOAT]`
-Causes the entity to wait for the given lenght of time, [FLOAT], in seconds.
+Load the script FILE_NAME and begin processing. Discard the current script. Can be called by its 'name' NAME without .txt or total path to call the file NAME.txt in the script folder.
 
-### `#WAITUNTIL [CONDITION]`
-Causes the entity to wait for the given condition. The script will stay on this command until the relevant condition is met.
+#### `#lockinput`
 
-## EXAMPLES:
+Causes the PlatformingBody2D to stop taking input from its Input node (player or AI)
 
-A quick example of code for an entity that goes back and forth on a platform until it hits a pit or a wall, turns around, then repeats:
+#### `#matchplayerposition`
 
-    :PATROL
-    #MOVE CURRENT UNTIL PIT WALL
-    #DIRECTION REVERSE
-    #WAIT 0.5
-    #GOTO PATROL
+Makes the entity position match the player's position.
+
+#### `#music [CLIP/SET] MUSIC_STRING` 
+
+Change current music clip (adaptive-music-wise) or overall set (set of adaptive music.) SET wasn't really used in Beast jam version.
+
+#### `#move DIRECTION` - PlatformingBody2D use only
+
+Causes PlatformingBody2D to begin moving in a direction. Valid directions are IDLE (stop moving), LEFT, RIGHT (as stated), REVERSE (opposite of its current facing direction) and CURRENT (the current facing direction.)
+
+#### `#movearea GOAL_X GOAL_Y VELOCITY_X VELOCITY_Y` - TriggerArea use only
+
+Moves the given TriggerArea to the given GOAL_X,GOAL_Y coordinates at a constant velocity of VELOCITY_X,VELOCITY_Y. All numbers will be interpreted as integers.
+
+#### `#queuefree`
+
+Causes the entity to leave the scene tree.
+
+#### `#resetcamerabox":
+
+Resets camera box to the default setting for the room.
+
+#### `#savegame ROOM_PATH SAVE_POSITION_X SAVE_POSITION_Y SAVE_AREA_LOCATION`
+
+Saves the game with ROOM_PATH for scene reload, save_position x,y for player placement, and save_area_description for the save file location. Normally this is auto-set by save points but can be called manually by scripts for special circumstances, e.g. being used at the start of the postjam version of the game to save the game at "Caves, Landing" and the appropriate scene.
+
+#### `#scenechange NEW_SCENE_PATH DIRECTION INTERNAL_ROOM_OFFSET_X INTERNAL_ROOM_OFFSET_Y`
+
+Causes the player object to be taken to a new scene at NEW_SCENE_PATH in the project's res:// folder.
+
+For DIRECTION, valid directional values are N, S, E, and W. Each room scene in the game is broken up into "subrooms"--e.g. The Landing is a 1x1 room, "The Drop" is several rooms high and one room wide. If the cardinal direction values are used, the INTERNAL_ROOM_OFFSET coordinates refer to the offset/difference needed to get the player to the expected 'subroom coordinates' for the 'exit point' of the scene change, versus the 'subroom coordinates' the player is at in the current (entry) point of the scene change.
+
+If DIRECTION is SAVE, then the offset values are taken to be the expected new player coordinates instead.
+
+#### `#setif`
+
+Sets the camera variable for the room. This is used to determine whether the camera has done a 'hard' or 'instant' reset to match the player position yet.
+
+#### `#showself` - PlatformingBody2D Only
+
+Show its sprite.
+
+#### `#sfx SFX`
+
+Have the sound effects handler play the SFX given. Here SFX is the string expected in the sounds dictionary.
+
+#### `#state` - PlatformingBody2D Only
+
+Causes this PlatformingBody2D to attempt to change it state by string name.
+
+#### `#store [UNIQUE/COUNTABLE/MYID] [VALUE]`
+
+Stores:
+* UNIQUE: Stores unique ID of type VALUE in game data.
+* COUNTABLE: Stores unique ID of type VALUE in game data and countable.
+* MYID: Special case of UNIQUE: stores the unique ID of the entity processing the script in game data. VALUE is not considered or required here as such.
+
+#### `#tempcounter MODIFIER INT`
+
+By MODIFIER, causes the following behavior in the "Room" node for its internal "local" variable:
+
+* WATCH causes Room to "watch" for its internal "local" variable to hit a the value of INT or higher (must be positive)
+* INC causes Room to "increase" its internal "local" variable by the value of INT
+* DEC causes Room to "decrease" its internal "local" variable by the value of INT
+
+#### `#textbox LINE_NUMBER TEXT`
+
+Creates a textbox with LINE_NUMBER of lines and containing writing TEXT.
+
+#### `#textboxclose`
+
+Close the current textbox.
+
+#### `#textboxoffset OFFSET_X OFFSET_Y`
+
+Offset the text box from the current location.
+
+#### `#textboxspeaker [OFFSET_X] [OFFSET_Y]`
+
+Sets the current textbox so that it centers on the object's position. Optionally, then offset the textbox by OFFSET_X and OFFSET_Y from that position.
+
+#### `#unlockinput`
+
+Causes the PlatformingBody2D to begin taking input from its Input node (player or AI)
+
+#### `#setcamerabox [INSTANT] X0 Y0 X1 Y1`
+
+Resets the camera bounding box to have X0,Y0 as the top-left and X1,Y1 at the bottom right. X1-X0 should be no less than 320. Y1 - Y0 should be no less than 180.
+
+If "instant" is declared, and the current camera box is not within the new bounds, will instantly set the new box. If "instant" is not declared, will move gradually instead.
+
+#### `#uniquecheck`
+
+Check this entity's own UNIQUE_ID--if it's stored in save data, thie entity leaves the scene.
+
+#### `#uxoff`
+
+Turn off player health display.
+
+#### `#uxon`
+
+Turn on player health display.
+
+#### `#wait TIME [MAX_TIME]`
+
+Waits either for TIME seconds, or TIME through MAX_TIME seconds, depending on whether MAX_TIME is given.
+
+#### `#wallcheck` - PlatformingBody2D
+
+Turns on wall-check for the PlatformingBody2D.
+
+#### "#waituntil CONDITION"
+
+Pause script execution until CONDITION is met, the move on to the next line.
+
+Valid CONDITIONS:
+
+* playerinput - any player input is triggered
+* interact (TriggerArea only) - player uses interact key and is within area
+* playerdetected (TriggerArea only) - player object is within the area
+* ai_pit (PlatformingBody2D only) - the AI ray detects a wall
+* ai_wall (PlatformingBody2D only) - the AI ray detects a wall
+* tempcounterdrained - temp counter condition as with #tempcounter is 'met'
+* movementfinished (TriggerArea only) - movement is finished (as with #movearea)
+* attackfinished (PlatformingBody2D only) - attack is finished
+
+Can be used like so to make an enemy move back and forth between two walls and/or pits (this is very simple code and a `#wait` may be wanted at some place:
+
+```
+:label
+#move current
+#waituntil ai_pit ai_wall
+#move reverse
+#goto label
+```
+
+
+
