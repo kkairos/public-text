@@ -215,22 +215,24 @@ Waits either for TIME seconds, or TIME through MAX_TIME seconds, depending on wh
 
 Turns on wall-check for the PlatformingBody2D.
 
-#### "#waituntil CONDITION"
+#### `#waituntil CONDITION`
 
 Pause script execution until CONDITION is met, the move on to the next line.
 
 Valid CONDITIONS:
 
-* playerinput - any player input is triggered
-* interact (TriggerArea only) - player uses interact key and is within area
-* playerdetected (TriggerArea only) - player object is within the area
+* attackfinished (PlatformingBody2D only) - attack is finished
 * ai_pit (PlatformingBody2D only) - the AI ray detects a wall
 * ai_wall (PlatformingBody2D only) - the AI ray detects a wall
-* tempcounterdrained - temp counter condition as with #tempcounter is 'met'
+* interact (TriggerArea only) - player uses interact key and is within area
 * movementfinished (TriggerArea only) - movement is finished (as with #movearea)
-* attackfinished (PlatformingBody2D only) - attack is finished
+* playerdetected (TriggerArea only) - player object is within the area
+* playerinput - any player input is triggered
+* tempcounterdrained - temp counter condition as with #tempcounter is 'met'
 
-Can be used like so to make an enemy move back and forth between two walls and/or pits (this is very simple code and a `#wait` may be wanted at some place:
+#### A quick scripting example for enemy AI
+
+The scripting can be used like so to make an enemy move back and forth between two walls and/or pits (this is very simple code and a `#wait` may be wanted at some place:
 
 ```
 :label
@@ -239,6 +241,7 @@ Can be used like so to make an enemy move back and forth between two walls and/o
 #move reverse
 #goto label
 ```
+
 
 
 
